@@ -8,6 +8,10 @@ import {
   View,
 } from "react-native";
 
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { EmptyState } from "@/src/components/EmptyState";
+
 import { useFocusEffect } from "@react-navigation/native";
 
 import { useRouter } from "expo-router";
@@ -44,7 +48,7 @@ export default function TransactionsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Pressable
         style={styles.addButton}
         onPress={() =>
@@ -64,9 +68,9 @@ export default function TransactionsScreen() {
         data={transactions}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
-          <Text>
-            No hay transacciones registradas
-          </Text>
+          <EmptyState
+            message="No hay transacciones registradas"
+          />
         }
         renderItem={({ item }) => (
           <View style={styles.card}>
@@ -122,7 +126,7 @@ export default function TransactionsScreen() {
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

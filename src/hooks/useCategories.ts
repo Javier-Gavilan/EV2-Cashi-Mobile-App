@@ -9,6 +9,8 @@ import {
 
 import { Category } from "@/src/types/category.types";
 
+import { getTransactions } from "@/src/storage/transactionStorage";
+
 export function useCategories() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +43,20 @@ export function useCategories() {
   }
 
   async function removeCategory(id: string) {
+    const transactions =
+      await getTransactions();
+
+    const categoryHasTransactions =
+      transactions.some(
+        (transaction) =>
+          transaction.categoryId === id
+      );
+
+    if (categoryHasTransactions) {
+      throw new Error(
+        "No puedes eliminar una categoría asociada a una transacción existente"
+      );
+    }
     await deleteCategory(id);
 
     await loadCategories();

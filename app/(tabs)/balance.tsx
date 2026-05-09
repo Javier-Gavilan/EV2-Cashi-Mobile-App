@@ -6,6 +6,8 @@ import {
   View,
 } from "react-native";
 
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useFocusEffect } from "@react-navigation/native";
 
 import { useTransactions } from "@/src/hooks/useTransactions";
@@ -25,7 +27,7 @@ export default function BalanceScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
         Resumen Financiero
       </Text>
@@ -66,7 +68,7 @@ export default function BalanceScreen() {
           ${balance}
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

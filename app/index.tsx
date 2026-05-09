@@ -1,4 +1,4 @@
-import { Text, View } from "@/components/Themed";
+import { Text } from "@/components/Themed";
 import {
   VALID_EMAIL,
   VALID_PASSWORD,
@@ -6,6 +6,8 @@ import {
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -28,7 +30,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
       <TextInput
@@ -52,7 +54,7 @@ export default function LoginScreen() {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

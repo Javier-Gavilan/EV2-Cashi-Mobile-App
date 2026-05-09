@@ -1,4 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
+
 import { useRouter } from "expo-router";
 
 import {
@@ -9,139 +10,179 @@ import {
     View,
 } from "react-native";
 
-import { useCallback } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import {
+    useCallback,
+    useState,
+} from "react";
 
 import { useCategories } from "@/src/hooks/useCategories";
 
+import { EmptyState } from "@/src/components/EmptyState";
+
 export default function CategoriesScreen() {
-    const router = useRouter();
+  const router = useRouter();
 
-    const {
-        categories,
-        removeCategory,
-        loadCategories,
-    } = useCategories();
+  const [error, setError] = useState("");
 
-    useFocusEffect(
-        useCallback(() => {
-            loadCategories();
-        }, [])
-    );
+  const {
+    categories,
+    removeCategory,
+    loadCategories,
+  } = useCategories();
 
-    return (
-        <View style={styles.container}>
-            <Pressable
-                style={styles.addButton}
+  useFocusEffect(
+    useCallback(() => {
+      loadCategories();
+    }, [])
+  );
+
+  async function handleDeleteCategory(
+    id: string
+  ) {
+    try {
+      setError("");
+
+      await removeCategory(id);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      }
+    }
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Pressable
+        style={styles.addButton}
+        onPress={() =>
+          router.push({
+            pathname: "/(tabs)/category/[id]",
+            params: { id: "new" },
+          })
+        }
+      >
+        <Text style={styles.addButtonText}>
+          Nueva Categoría
+        </Text>
+      </Pressable>
+
+      {error !== "" && (
+        <Text style={styles.error}>
+          {error}
+        </Text>
+      )}
+
+      <FlatList
+        data={categories}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <EmptyState
+            message="No hay categorías registradas"
+          />
+        }
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.name}>
+              {item.name}
+            </Text>
+
+            <View style={styles.actions}>
+              <Pressable
+                style={styles.editButton}
                 onPress={() =>
-                    router.push({
-                        pathname: "/(tabs)/category/[id]",
-                        params: { id: "new" },
-                    })
+                  router.push({
+                    pathname:
+                      "/(tabs)/category/[id]",
+                    params: {
+                      id: item.id,
+                    },
+                  })
                 }
-            >
-                <Text style={styles.addButtonText}>
-                    Nueva Categoría
+              >
+                <Text style={styles.buttonText}>
+                  Editar
                 </Text>
-            </Pressable>
+              </Pressable>
 
-            <FlatList
-                data={categories}
-                keyExtractor={(item) => item.id}
-                ListEmptyComponent={
-                    <Text>
-                        No hay categorías registradas
-                    </Text>
+              <Pressable
+                style={styles.deleteButton}
+                onPress={() =>
+                  handleDeleteCategory(item.id)
                 }
-                renderItem={({ item }) => (
-                    <View style={styles.card}>
-                        <Text style={styles.name}>
-                            {item.name}
-                        </Text>
-
-                        <View style={styles.actions}>
-                            <Pressable
-                                style={styles.editButton}
-                                onPress={() =>
-                                    router.push({
-                                        pathname: "/(tabs)/category/[id]",
-                                        params: { id: item.id },
-                                    })
-                                }
-                            >
-                                <Text style={styles.buttonText}>
-                                    Editar
-                                </Text>
-                            </Pressable>
-
-                            <Pressable
-                                style={styles.deleteButton}
-                                onPress={() =>
-                                    removeCategory(item.id)
-                                }
-                            >
-                                <Text style={styles.buttonText}>
-                                    Eliminar
-                                </Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                )}
-            />
-        </View>
-    );
+              >
+                <Text style={styles.buttonText}>
+                  Eliminar
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-    },
+  container: {
+    flex: 1,
+    padding: 16,
+  },
 
-    addButton: {
-        backgroundColor: "#22c55e",
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 16,
-        alignItems: "center",
-    },
+  addButton: {
+    backgroundColor: "#22c55e",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignItems: "center",
+  },
 
-    addButtonText: {
-        color: "#fff",
-        fontWeight: "bold",
-    },
+  addButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 
-    card: {
-        padding: 16,
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 8,
-        marginBottom: 12,
-    },
+  error: {
+    color: "#ef4444",
+    marginBottom: 12,
+    textAlign: "center",
+  },
 
-    name: {
-        fontSize: 18,
-        marginBottom: 12,
-    },
+  card: {
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    marginBottom: 12,
+    backgroundColor: "#fff",
+  },
 
-    actions: {
-        flexDirection: "row",
-        gap: 10,
-    },
+  name: {
+    fontSize: 18,
+    marginBottom: 12,
+    fontWeight: "bold",
+  },
 
-    editButton: {
-        backgroundColor: "#3b82f6",
-        padding: 10,
-        borderRadius: 6,
-    },
+  actions: {
+    flexDirection: "row",
+    gap: 10,
+  },
 
-    deleteButton: {
-        backgroundColor: "#ef4444",
-        padding: 10,
-        borderRadius: 6,
-    },
+  editButton: {
+    backgroundColor: "#3b82f6",
+    padding: 10,
+    borderRadius: 6,
+  },
 
-    buttonText: {
-        color: "#fff",
-        fontWeight: "bold",
-    },
-}); 
+  deleteButton: {
+    backgroundColor: "#ef4444",
+    padding: 10,
+    borderRadius: 6,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+});
