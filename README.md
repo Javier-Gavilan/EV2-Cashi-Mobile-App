@@ -1,6 +1,6 @@
-# Login React Native App
+# Cashi Mobile App
 
-Vídeo Demostrativo: https://www.youtube.com/watch?v=0r9VyOx19ps
+Vídeo Demostrativo:
 
 Aplicación de Login simple hecha con:
 

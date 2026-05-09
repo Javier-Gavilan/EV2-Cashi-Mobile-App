@@ -54,7 +54,7 @@ export default function TransactionsScreen() {
         onPress={() =>
           router.push({
             pathname:
-              "/(tabs)/transaction/[id]",
+              "/transaction/[id]",
             params: { id: "new" },
           })
         }
@@ -100,7 +100,7 @@ export default function TransactionsScreen() {
                 onPress={() =>
                   router.push({
                     pathname:
-                      "/(tabs)/transaction/[id]",
+                      "/transaction/[id]",
                     params: {
                       id: item.id,
                     },

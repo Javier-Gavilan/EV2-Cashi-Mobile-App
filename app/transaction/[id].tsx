@@ -16,6 +16,10 @@ import { useTransactionForm } from "@/src/hooks/useTransactionForm";
 
 import { useCategories } from "@/src/hooks/useCategories";
 
+import { useFocusEffect } from "@react-navigation/native";
+
+import { useCallback } from "react";
+
 export default function TransactionFormScreen() {
     const router = useRouter();
 
@@ -23,7 +27,14 @@ export default function TransactionFormScreen() {
         id: string;
     }>();
 
-    const { categories } = useCategories();
+    const { categories, loadCategories } =
+        useCategories();
+
+    useFocusEffect(
+        useCallback(() => {
+            loadCategories();
+        }, [])
+    );
 
     const {
         amount,

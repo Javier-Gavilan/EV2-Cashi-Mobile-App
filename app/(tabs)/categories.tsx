@@ -3,18 +3,18 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 
 import {
-    FlatList,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-    useCallback,
-    useState,
+  useCallback,
+  useState,
 } from "react";
 
 import { useCategories } from "@/src/hooks/useCategories";
@@ -58,7 +58,7 @@ export default function CategoriesScreen() {
         style={styles.addButton}
         onPress={() =>
           router.push({
-            pathname: "/(tabs)/category/[id]",
+            pathname: "/category/[id]",
             params: { id: "new" },
           })
         }
@@ -94,7 +94,7 @@ export default function CategoriesScreen() {
                 onPress={() =>
                   router.push({
                     pathname:
-                      "/(tabs)/category/[id]",
+                      "/category/[id]",
                     params: {
                       id: item.id,
                     },
