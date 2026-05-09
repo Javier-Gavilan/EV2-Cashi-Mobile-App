@@ -19,3 +19,63 @@ export async function saveCategories(
     JSON.stringify(categories)
   );
 }
+
+export async function createCategory(
+  name: string
+): Promise<Category> {
+  const categories = await getCategories();
+
+  const newCategory: Category = {
+    id: Date.now().toString(),
+    name,
+  };
+
+  const updatedCategories = [
+    ...categories,
+    newCategory,
+  ];
+
+  await saveCategories(updatedCategories);
+
+  return newCategory;
+}
+
+export async function updateCategory(
+  id: string,
+  name: string
+): Promise<void> {
+  const categories = await getCategories();
+
+  const updatedCategories = categories.map((category) =>
+    category.id === id
+      ? {
+          ...category,
+          name,
+        }
+      : category
+  );
+
+  await saveCategories(updatedCategories);
+}
+
+export async function deleteCategory(
+  id: string
+): Promise<void> {
+  const categories = await getCategories();
+
+  const updatedCategories = categories.filter(
+    (category) => category.id !== id
+  );
+
+  await saveCategories(updatedCategories);
+}
+
+export async function getCategoryById(
+  id: string
+): Promise<Category | undefined> {
+  const categories = await getCategories();
+
+  return categories.find(
+    (category) => category.id === id
+  );
+}
