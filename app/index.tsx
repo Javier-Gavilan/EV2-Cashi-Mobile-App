@@ -1,10 +1,11 @@
 import { Text, View } from "@/components/Themed";
+import {
+  VALID_EMAIL,
+  VALID_PASSWORD,
+} from "@/src/constants/auth";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
-
-const VALID_EMAIL = "usuario@correo.com";
-const VALID_PASSWORD = "1234";
 
 export default function LoginScreen() {
   const router = useRouter();
