@@ -49,9 +49,9 @@ export async function updateCategory(
   const updatedCategories = categories.map((category) =>
     category.id === id
       ? {
-          ...category,
-          name,
-        }
+        ...category,
+        name,
+      }
       : category
   );
 

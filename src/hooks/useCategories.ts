@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 import {
-    createCategory,
-    deleteCategory,
-    getCategories,
-    updateCategory,
+  createCategory,
+  deleteCategory,
+  getCategories,
+  updateCategory,
 } from "@/src/storage/categoryStorage";
 
 import { Category } from "@/src/types/category.types";

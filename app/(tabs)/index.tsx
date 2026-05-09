@@ -1,12 +1,127 @@
-import { StyleSheet } from 'react-native';
+import { useCallback } from "react";
 
-import { Text, View } from '@/components/Themed';
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
-export default function TabOneScreen() {
+import { useFocusEffect } from "@react-navigation/native";
+
+import { useRouter } from "expo-router";
+
+import { useTransactions } from "@/src/hooks/useTransactions";
+
+import { useCategories } from "@/src/hooks/useCategories";
+
+export default function TransactionsScreen() {
+  const router = useRouter();
+
+  const {
+    transactions,
+    removeTransaction,
+    loadTransactions,
+  } = useTransactions();
+
+  const { categories } = useCategories();
+
+  useFocusEffect(
+    useCallback(() => {
+      loadTransactions();
+    }, [])
+  );
+
+  function getCategoryName(
+    categoryId: string
+  ) {
+    const category = categories.find(
+      (item) => item.id === categoryId
+    );
+
+    return category?.name ?? "Sin categoría";
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <Pressable
+        style={styles.addButton}
+        onPress={() =>
+          router.push({
+            pathname:
+              "/(tabs)/transaction/[id]",
+            params: { id: "new" },
+          })
+        }
+      >
+        <Text style={styles.addButtonText}>
+          Nueva Transacción
+        </Text>
+      </Pressable>
+
+      <FlatList
+        data={transactions}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <Text>
+            No hay transacciones registradas
+          </Text>
+        }
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.description}>
+              {item.description}
+            </Text>
+
+            <Text>
+              Categoría:{" "}
+              {getCategoryName(item.categoryId)}
+            </Text>
+
+            <Text>
+              Tipo:{" "}
+              {item.type === "income"
+                ? "Ingreso"
+                : "Egreso"}
+            </Text>
+
+            <Text>
+              Monto: ${item.amount}
+            </Text>
+
+            <View style={styles.actions}>
+              <Pressable
+                style={styles.editButton}
+                onPress={() =>
+                  router.push({
+                    pathname:
+                      "/(tabs)/transaction/[id]",
+                    params: {
+                      id: item.id,
+                    },
+                  })
+                }
+              >
+                <Text style={styles.buttonText}>
+                  Editar
+                </Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.deleteButton}
+                onPress={() =>
+                  removeTransaction(item.id)
+                }
+              >
+                <Text style={styles.buttonText}>
+                  Eliminar
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
+      />
     </View>
   );
 }
@@ -14,16 +129,56 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+
+  addButton: {
+    backgroundColor: "#22c55e",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignItems: "center",
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+
+  addButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+
+  card: {
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+
+  description: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+
+  actions: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 12,
+  },
+
+  editButton: {
+    backgroundColor: "#3b82f6",
+    padding: 10,
+    borderRadius: 6,
+  },
+
+  deleteButton: {
+    backgroundColor: "#ef4444",
+    padding: 10,
+    borderRadius: 6,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
