@@ -4,17 +4,19 @@ Vídeo Demostrativo:
 
 Aplicación de Login simple hecha con:
 
+- Node
 - React Native
 - TypeScript
 - Expo
-- Node
+- AsyncStorage
+- Zod
+- SafeAreaView
 
 Características:
 
-- Login mediante credenciales predeterminadas
-- Validación de Login
-- Navegación por tabs
-- Pantalla de Perfil mostrando el correo
+- Login mediante credenciales predeterminadas con validación
+- Navegación por tabs de Categoría y Transacciones
+- Creación de Categorías y Transacciones con guardado persistente y validación
 
 Instrucciones:
 
@@ -22,7 +24,8 @@ Instrucciones:
 - Ejecutar *yarn install*
 - Ejecutar *yarn start*
 - Comprobar funcionamiento desde Expo
+- Ingresar con *usuario@correo.com* y *1234* y comprobar el funcionamiento de los botones.
 
 Uso de IA:
 
-> Mediante *ChatGPT* normalmente pregunto por fallos que ocurren tanto en el código como en su ejecución, especificando lo que ocurre y el tipo de error. Generalmente es por que hay cosas que se me pasan por alto o que fallan, como no haber definido correctamente el Stack 'index.tsx' en app/_layout.tsx, o el haber aprendido a usar el 'useGlobalSearchParams' para mostrar el email en la pantalla Perfil al no tomar la constante de email en index.tsx con useLocalSearchParams.
+> Mediante *ChatGPT* pregunté por la estructuración básica del proyecto, con las carpetas y archivos que necesitaba establecer en src/ y los componentes de constants, hooks, storage, etc. También fuí consultando errores que me saltaban de vez en cuando en el proyecto, como cuando las rutas dinámicas no me funcionaban por que tenía que reiniciar el servidor Expo con *npx expo start --clear* o reestructurar las rutas dinámicas fuera de (tabs), además de preguntar como realizar estas ya que me compliqué al momento de ver como crearlas.
